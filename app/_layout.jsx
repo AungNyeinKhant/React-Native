@@ -1,14 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native'
-import { Slot,SplashScreen,Stack } from 'expo-router'
-import { useFonts} from 'expo-font'
-import { useEffect,useContext } from 'react'
+import { useEffect } from "react";
+import { useFonts } from "expo-font";
+import "react-native-url-polyfill/auto";
+import { SplashScreen, Stack } from "expo-router";
 
-import { GlobalProvider} from '../context/GlobalProvider'
+import GlobalProvider from "../context/GlobalProvider";
 
-SplashScreen.preventAutoHideAsync()
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  const [fontsLoaded,error] = useFonts({
+  const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
@@ -18,44 +19,34 @@ const RootLayout = () => {
     "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
-  })
+  });
 
   useEffect(() => {
-    if(error) throw error
+    if (error) throw error;
 
-    if(fontsLoaded) SplashScreen.hideAsync()
-  },[fontsLoaded,error])
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, error]);
 
-  if(!fontsLoaded && !error) return null
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  if (!fontsLoaded && !error) {
+    return null;
+  }
 
   return (
-    <>
-        {/* <Text>Header</Text>
-          <Slot />
-        <Text>Footer</Text> */}
-        <GlobalProvider>
-          <Stack>
-            <Stack.Screen name='index' options={{
-              headerShown : false
-            }
-            } />
-            <Stack.Screen name='(auth)' options={{
-              headerShown : false
-            }
-            } />
-            <Stack.Screen name='(tabs)' options={{
-              headerShown : false
-            }
-            } />
-            {/* <Stack.Screen name='/search/[query]' options={{
-              headerShown : false
-            }
-            } /> */}
-          </Stack>
-        </GlobalProvider>
-    </>
-  )
-}
+    <GlobalProvider>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="search/[query]" options={{ headerShown: false }} />
+      </Stack>
+    </GlobalProvider>
+  );
+};
 
-export default RootLayout
-
+export default RootLayout;
